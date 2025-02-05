@@ -1,0 +1,29 @@
+# A program that will display the number of vowels, 
+# consonants, spaces, and other characters given an input string. 
+# (use for loop and some operators under module 1 and 2)
+
+user_input = input("Input: ")
+
+vowel_chars = "aeiouAEIOU"
+consonant_chars = "bcdfghjklmnpqrstvwxyzBCDFGHJKLMNPQRSTVWXYZ"
+
+vowel_count = 0
+consonant_count = 0
+space_count = 0
+other_count = 0
+
+for char in user_input:
+    if char in vowel_chars:
+        vowel_count += 1
+    elif char in consonant_chars:
+        consonant_count += 1
+    elif char == " ":
+        space_count += 1
+    else:
+        other_count += 1
+
+print("\nCharacter Counts:")
+print("Vowels:", vowel_count)
+print("Consonants:", consonant_count)
+print("Spaces:", space_count)
+print("Others:", other_count)
