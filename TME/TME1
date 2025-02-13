@@ -1,0 +1,10 @@
+#Create a program that will open the file numbers.txt
+def is_palindrome(number):
+    return str(number) == str(number)[::-1]
+
+with open("numbers.txt") as file:
+    for line_number, line_content in enumerate(file, start=1):
+        numbers = list(map(int, line_content.strip().split(',')))
+        total_sum = sum(numbers)
+        status = "Palindrome" if is_palindrome(total_sum) else "Not a Palindrome"
+        print(f"Line {line_number}: {', '.join(map(str, numbers))} (sum {total_sum}) - {status}")
