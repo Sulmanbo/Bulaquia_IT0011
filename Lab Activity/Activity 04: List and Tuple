@@ -1,0 +1,145 @@
+#Activity 04: List and Tuple
+
+import os
+records = []
+current_file = ''
+
+while True:
+    print("\n1 - Open File")
+    print("2 - Save File")
+    print("3 - Save As")
+    print("4 - Show All Records")
+    print("5 - Order by Last Name")
+    print("6 - Order by Final Grade")
+    print("7 - Show Record by ID")
+    print("8 - Add Record")
+    print("9 - Edit Record")
+    print("10 - Delete Record")
+    print("11 - Exit")
+    
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+        file_name = input("Enter filename: ")
+        if os.path.exists(file_name):
+            with open(file_name, 'r') as file:
+                records.clear()
+                student_data = file.read().strip().split('\n\n')
+                for entry in student_data:
+                    lines = entry.split('\n')
+                    if len(lines) == 4:
+                        student_id = lines[0].split(': ')[1]
+                        student_name = tuple(lines[1].split(': ')[1].split(' ', 1))
+                        class_standing = float(lines[2].split(': ')[1])
+                        major_exam = float(lines[3].split(': ')[1])
+                        records.append((student_id, student_name, class_standing, major_exam))
+            current_file = file_name
+            print(f"File '{file_name}' loaded successfully.")
+        else:
+            print("File not found.")
+
+    elif choice == "2":
+        if current_file:
+            with open(current_file, 'w') as file:
+                for student_id, student_name, class_standing, major_exam in records:
+                    file.write(
+                        f"Student ID: {student_id}\n"
+                        f"Student Name: {student_name[0]} {student_name[1]}\n"
+                        f"Class Standing: {class_standing}\n"
+                        f"Major Exam: {major_exam}\n\n"
+                    )
+            print(f"Records saved to '{current_file}'.")
+        else:
+            print("No file opened. Use 'Save As' instead.")
+
+    elif choice == "3":
+        current_file = input("Enter new filename: ")
+        with open(current_file, 'w') as file:
+            for student_id, student_name, class_standing, major_exam in records:
+                file.write(
+                    f"Student ID: {student_id}\n"
+                    f"Student Name: {student_name[0]} {student_name[1]}\n"
+                    f"Class Standing: {class_standing}\n"
+                    f"Major Exam: {major_exam}\n\n"
+                )
+        print(f"Records saved to '{current_file}'.")
+
+    elif choice == "4":
+        if not records:
+            print("No student records available.")
+        else:
+            print("\nStudent Records:")
+            for student_id, student_name, class_standing, major_exam in records:
+                final_grade = class_standing * 0.6 + major_exam * 0.4
+                print(
+                    f"Student ID: {student_id}\n"
+                    f"Student Name: {student_name[0]} {student_name[1]}\n"
+                    f"Class Standing: {class_standing}\n"
+                    f"Major Exam: {major_exam}\n"
+                    f"Final Grade: {final_grade:.2f}\n"
+                )
+
+    elif choice == "5":
+        records.sort(key=lambda x: x[1][1])
+        print("Records sorted by last name.")
+
+    elif choice == "6":
+        records.sort(key=lambda x: x[2] * 0.6 + x[3] * 0.4, reverse=True)
+        print("Records sorted by final grade.")
+
+    elif choice == "7":
+        student_id = input("Enter Student ID: ")
+        found = False
+        for record in records:
+            if record[0] == student_id:
+                final_grade = record[2] * 0.6 + record[3] * 0.4
+                print(
+                    f"\nStudent ID: {record[0]}\n"
+                    f"Student Name: {record[1][0]} {record[1][1]}\n"
+                    f"Class Standing: {record[2]}\n"
+                    f"Major Exam: {record[3]}\n"
+                    f"Final Grade: {final_grade:.2f}\n"
+                )
+                found = True
+                break
+        if not found:
+            print("Student not found.")
+
+    elif choice == "8":
+        student_id = input("Enter 6-digit Student ID: ")
+        if not student_id.isdigit() or len(student_id) != 6 or any(r[0] == student_id for r in records):
+            print("Invalid or duplicate Student ID.")
+            continue
+        full_name = input("Enter Student Full Name: ").split(maxsplit=1)
+        if len(full_name) != 2:
+            print("Please enter both first and last names.")
+            continue
+        class_standing = float(input("Enter Class Standing: "))
+        major_exam = float(input("Enter Major Exam Grade: "))
+        records.append((student_id, tuple(full_name), class_standing, major_exam))
+        print("Record added successfully.")
+
+    elif choice == "9":
+        student_id = input("Enter Student ID to edit: ")
+        for i, record in enumerate(records):
+            if record[0] == student_id:
+                full_name = input(f"New Full Name [{record[1][0]} {record[1][1]}]: ").split(maxsplit=1) or record[1]
+                class_standing = float(input(f"New Class Standing [{record[2]}]: ") or record[2])
+                major_exam = float(input(f"New Major Exam Grade [{record[3]}]: ") or record[3])
+                records[i] = (student_id, tuple(full_name), class_standing, major_exam)
+                print("Record updated.")
+                break
+        else:
+            print("Student not found.")
+
+    elif choice == "10":
+        student_id = input("Enter Student ID to delete: ")
+        records = [record for record in records if record[0] != student_id]
+        print("Record deleted (if it existed).")
+
+    elif choice == "11":
+        print("Exiting program.")
+        break
+
+    else:
+        print("Invalid choice. Please try again.")
