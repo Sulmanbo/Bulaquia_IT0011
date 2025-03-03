@@ -1,1 +1,25 @@
+#4B.2
+exchange_rates = {}
+currency_names = {}
 
+with open("currency.csv", "r", encoding="ISO-8859-1") as file:
+    next(file)
+    for line in file:
+        columns = line.strip().split(",")
+        currency_code = columns[0].strip()
+        currency_name = columns[1].strip()
+        conversion_rate = float(columns[2].strip())
+
+        exchange_rates[currency_code] = conversion_rate
+        currency_names[currency_code] = currency_name
+
+usd_amount = float(input("Enter the amount in dollars (USD): "))
+target_currency = input("Enter the currency code you want to convert to: ").strip().upper()
+
+if target_currency in exchange_rates:
+    converted_amount = usd_amount * exchange_rates[target_currency]
+    print(f"\nAmount in USD: {usd_amount} USD")
+    print(f"{currency_names[target_currency]}: {converted_amount:.2f}")
+else:
+    print("Currency code not found. Please try again.")
+    
