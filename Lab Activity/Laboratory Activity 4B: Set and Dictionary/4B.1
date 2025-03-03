@@ -1,1 +1,25 @@
+#4B.1
+A = {'a', 'b', 'c', 'g', 'd', 'f'}
+B = {'l', 'm', 'o', 'b', 'c', 'h'}
+C = {'c', 'h', 'k', 'd', 'f', 'j', 'i'}
 
+elements_in_AB = A.union(B)
+print("Number of elements in set A and B:", len(elements_in_AB))
+
+exclusive_B = B.difference(A.union(C))
+print("Number of elements in B that is not part of A and C:", len(exclusive_B))
+
+print("Show the following using set operations:")
+i = (C.difference(A.union(B))).union(B.intersection(C) - A.intersection(B).intersection(C))
+ii = A.intersection(C)
+iii = (A.intersection(B)).union(B.intersection(C))
+iv = A.intersection(C) - B
+v = A.intersection(B).intersection(C)
+vi = B.difference(A.union(C))
+
+print("i.", i)
+print("ii.", ii)
+print("iii.", iii)
+print("iv.", iv)
+print("v.", v)
+print("vi.", vi)
