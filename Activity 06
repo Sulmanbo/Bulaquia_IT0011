@@ -1,0 +1,118 @@
+#Activity 06: OOP and Exception
+class Item:
+    def __init__(self, id_num, product_name, info, cost):
+        self.id_num = id_num
+        self.product_name = product_name
+        self.info = info
+        self.cost = cost
+
+    def __str__(self):
+        return f"ID: {self.id_num}, Name: {self.product_name}, Info: {self.info}, Cost: \u20b1{self.cost:.2f}"
+
+
+class Inventory:
+    def __init__(self):
+        self.items = {}
+
+    def add_item(self, id_num, product_name, info, cost):
+        self.check_id(id_num)
+        self.check_cost(cost)
+        new_item = Item(id_num, product_name, info, cost)
+        self.items[id_num] = new_item
+        print(f"Added: {new_item}")
+        return new_item
+
+    def get_item(self, id_num):
+        self.check_id(id_num)
+        return self.items.get(id_num, None)
+
+    def change_item(self, id_num, product_name=None, info=None, cost=None):
+        self.check_id(id_num)
+        old_item = self.items.get(id_num)
+        if not old_item:
+            raise ValueError("Item not found!")
+
+        if product_name:
+            old_item.product_name = product_name
+        if info:
+            old_item.info = info
+        if cost is not None:
+            self.check_cost(cost)
+            old_item.cost = cost
+
+        print(f"Changed: {old_item}")
+        return old_item
+
+    def delete_item(self, id_num):
+        self.check_id(id_num)
+        if id_num in self.items:
+            del self.items[id_num]
+            print(f"Item {id_num} deleted.")
+        else:
+            raise ValueError("Item not found.")
+
+    def check_id(self, id_num):
+        if not isinstance(id_num, int) or id_num <= 0:
+            raise ValueError("ID should be a positive number.")
+
+    def check_cost(self, cost):
+        if not isinstance(cost, (int, float)) or cost < 0:
+            raise ValueError("Cost should be positive.")
+
+
+if __name__ == "__main__":
+    my_inventory = Inventory()
+
+    while True:
+        print("\n1. Add Item")
+        print("2. Get Item")
+        print("3. Change Item")
+        print("4. Delete Item")
+        print("5. Exit")
+
+        choice = input("Pick a number: ")
+
+        if choice == '1':
+            try:
+                id_num = int(input("ID: "))
+                product_name = input("Name: ")
+                info = input("Info: ")
+                cost = float(input("Cost: "))
+                my_inventory.add_item(id_num, product_name, info, cost)
+            except ValueError as e:
+                print(f"Error! {e}")
+
+        elif choice == '2':
+            try:
+                id_num = int(input("ID: "))
+                item = my_inventory.get_item(id_num)
+                print(item if item else "Not found.")
+            except ValueError as e:
+                print(f"Error! {e}")
+
+        elif choice == '3':
+            try:
+                id_num = int(input("ID: "))
+                product_name = input("New Name (optional): ")
+                info = input("New Info (optional): ")
+                cost_input = input("New Cost (optional): ")
+                cost = float(cost_input) if cost_input else None
+                my_inventory.change_item(id_num, product_name if product_name else None,
+                                          info if info else None,
+                                          cost)
+            except ValueError as e:
+                print(f"Error! {e}")
+
+        elif choice == '4':
+            try:
+                id_num = int(input("ID: "))
+                my_inventory.delete_item(id_num)
+            except ValueError as e:
+                print(f"Error! {e}")
+
+        elif choice == '5':
+            print("Bye!")
+            break
+
+        else:
+            print("That's not an option!")
