@@ -1,0 +1,52 @@
+#Activity 05: Function
+def division(numerator, denominator):
+    if denominator == 0:
+        return None
+    return numerator / denominator
+
+def power(base, exponent):
+    return base ** exponent
+
+def modulo(dividend, divisor):
+    if divisor == 0:
+        return None
+    return dividend % divisor
+
+def series_sum(start_val, end_val):
+    if start_val > end_val:
+        return None
+    return sum(range(start_val, end_val + 1))
+
+while True:
+    print("Select an Operation:")
+    print("[D] - Division")
+    print("[E] - Power")
+    print("[R] - Modulo")
+    print("[F] - Series Sum")
+    print("[X] - Terminate")
+
+    selection = input("Enter your choice: ").upper().strip()
+
+    if selection == 'X':
+        print("Program terminated.")
+        break
+
+    if selection in ['D', 'R', 'E', 'F']:
+        first_num = int(input("Enter the first value: "))
+        second_num = int(input("Enter the second value: "))
+        if selection == 'D':
+            outcome = division(first_num, second_num)
+        elif selection == 'E':
+            outcome = power(first_num, second_num)
+        elif selection == 'R':
+            outcome = modulo(first_num, second_num)
+        elif selection == 'F':
+            outcome = series_sum(first_num, second_num)
+        else:
+            print("Invalid selection.")
+            continue
+
+    if outcome is None:
+        print("Operation failed due to invalid input.")
+    else:
+        print(f"The result is: {outcome}")
